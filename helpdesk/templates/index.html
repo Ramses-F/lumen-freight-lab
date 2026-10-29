@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Lumen Helpdesk{% endblock %}
+{% block content %}
+<h2>Bienvenue sur Lumen Helpdesk</h2>
+<p>Portail de support interne de <b>Lumen Freight Services</b>. Créez un compte
+ou connectez-vous pour soumettre un ticket à l'équipe IT/logistique.</p>
+<p>
+  <a href="{{ url_for('login') }}"><button>Connexion</button></a>
+</p>
+{% endblock %}

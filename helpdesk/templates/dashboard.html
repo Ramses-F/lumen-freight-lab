@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Mes tickets{% endblock %}
+{% block content %}
+<h2>Mes tickets</h2>
+<p><a href="{{ url_for('new_ticket') }}"><button>+ Nouveau ticket</button></a></p>
+<table>
+  <tr><th>ID</th><th>Sujet</th><th>Créé le</th></tr>
+  {% for t in tickets %}
+  <tr>
+    <td><a href="{{ url_for('view_ticket', ticket_id=t['id']) }}">#{{ t['id'] }}</a></td>
+    <td>{{ t['subject'] }}</td>
+    <td>{{ t['created_at'] }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="3">Aucun ticket pour le moment.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

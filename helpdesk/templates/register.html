@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Créer un compte{% endblock %}
+{% block content %}
+<h2>Créer un compte employé</h2>
+<form method="post">
+  <label>Nom affiché</label>
+  <input name="display_name" required>
+  <label>Identifiant</label>
+  <input name="username" required>
+  <label>Mot de passe</label>
+  <input name="password" type="password" required>
+  <button type="submit">Créer le compte</button>
+</form>
+{% endblock %}

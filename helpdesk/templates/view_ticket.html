@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Ticket #{{ ticket['id'] }}{% endblock %}
+{% block content %}
+<h2>Ticket #{{ ticket['id'] }} — {{ ticket['subject'] }}</h2>
+<p style="color:#5a6672; font-size:.85rem;">Auteur : {{ ticket['author_name'] }}
+  ({{ ticket['author_username'] }}) — créé le {{ ticket['created_at'] }}</p>
+<div style="white-space:pre-wrap; background:#f8f9fb; padding:1rem; border-radius:6px; border:1px solid #e5e9ed;">{{ ticket['description'] }}</div>
+
+{% if ticket['preview_snippet'] %}
+<h4 style="margin-top:1.5rem;">Aperçu pièce jointe (généré automatiquement)</h4>
+<pre style="background:#10151c; color:#9fe6a0; padding:1rem; border-radius:6px; overflow-x:auto; white-space:pre-wrap;">{{ ticket['preview_snippet'] }}</pre>
+{% endif %}
+
+<p style="margin-top:1.5rem;"><a href="{{ url_for('dashboard') }}">&larr; Retour à mes tickets</a></p>
+{% endblock %}

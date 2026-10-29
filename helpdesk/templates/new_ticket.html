@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Nouveau ticket{% endblock %}
+{% block content %}
+<h2>Nouveau ticket</h2>
+<p style="color:#5a6672; font-size:.9rem;">Astuce : vous pouvez joindre une image en l'écrivant
+sous la forme <code>![description](https://exemple.com/image.png)</code> dans la description ;
+un aperçu sera généré automatiquement.</p>
+<form method="post">
+  <label>Sujet</label>
+  <input name="subject" required>
+  <label>Description</label>
+  <textarea name="description" required></textarea>
+  <button type="submit">Envoyer</button>
+</form>
+{% endblock %}

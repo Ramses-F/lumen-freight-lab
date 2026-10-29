@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}File support{% endblock %}
+{% block content %}
+<h2>File d'attente support</h2>
+<table>
+  <tr><th>ID</th><th>Sujet</th><th>Auteur</th><th>Créé le</th></tr>
+  {% for t in tickets %}
+  <tr>
+    <td><a href="{{ url_for('view_ticket', ticket_id=t['id']) }}">#{{ t['id'] }}</a></td>
+    <td>{{ t['subject'] }}</td>
+    <td>{{ t['author_name'] }}</td>
+    <td>{{ t['created_at'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

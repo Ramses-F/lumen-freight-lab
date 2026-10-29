@@ -1,0 +1,59 @@
+# Lumen Freight Services — Lab de pentest pédagogique
+# -----------------------------------------------------
+# Confinement réseau (point 6 du cahier des charges) :
+#   - "public_net"   : seul le service "helpdesk" y est exposé à l'hôte
+#                       (port 5000 -> 127.0.0.1:5000 uniquement, pas 0.0.0.0).
+#   - "internal_net" : réseau interne Docker, SANS accès à l'hôte ni à
+#                       Internet pour "vault". Seul "helpdesk" peut lui
+#                       parler. C'est ce confinement qui transforme le SSRF
+#                       en véritable scénario de pivot, et qui garantit que
+#                       "vault" n'est jamais directement attaquable.
+#
+# Aucune donnée réelle, aucun secret réel : tout est fictif (voir
+# VULNERABILITIES.md et docs/FORMATEUR.md).
+
+services:
+  helpdesk:
+    build: ./helpdesk
+    container_name: lumen-helpdesk
+    environment:
+      - HELPDESK_SECRET_KEY=dev-only-not-a-real-secret
+      - HELPDESK_DB_PATH=/data/helpdesk.db
+      - HELPDESK_PREVIEW_TIMEOUT=3
+    ports:
+      - "127.0.0.1:5000:5000"   # exposé uniquement en local, jamais 0.0.0.0
+    networks:
+      - public_net
+      - internal_net
+    volumes:
+      - helpdesk_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  vault:
+    build: ./vault
+    container_name: lumen-vault
+    # Volontairement AUCUN mapping de port vers l'hôte : seul le réseau
+    # interne Docker permet de joindre ce service.
+    networks:
+      - internal_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5001/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+networks:
+  public_net:
+    driver: bridge
+  internal_net:
+    driver: bridge
+    internal: true   # pas de route vers l'extérieur / Internet pour ce réseau
+
+volumes:
+  helpdesk_data:
